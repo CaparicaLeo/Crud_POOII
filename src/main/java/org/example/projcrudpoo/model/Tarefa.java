@@ -7,10 +7,6 @@ public class Tarefa {
     private int idUsuario;
     private int id;
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     public int getId() {
         return id;
     }

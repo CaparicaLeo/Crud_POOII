@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.projcrudpoo.dao.TarefaDBDAO;
-import org.example.projcrudpoo.dao.UsuarioDAO;
 import org.example.projcrudpoo.dao.UsuarioDBDAO;
 import org.example.projcrudpoo.model.Exportador;
 import org.example.projcrudpoo.model.Tarefa;
@@ -47,7 +46,7 @@ public class TarefaController {
 
 
     @FXML
-    public void initialize() throws SQLException {
+    public void initialize(){
         // Configura as colunas da tabela para mostrar os dados da Tarefa
         idColuna.setCellValueFactory(new PropertyValueFactory<>("id"));
         tituloColuna.setCellValueFactory(new PropertyValueFactory<>("titulo"));

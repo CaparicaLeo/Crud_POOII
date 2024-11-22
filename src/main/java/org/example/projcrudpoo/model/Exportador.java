@@ -9,20 +9,27 @@ import java.util.Date;
 import java.util.ArrayList;
 
 public class Exportador {
+    /*
+        2° Refatoração
+        Autor: Leonardo Caparica
+        Criação de atributo estático para pasta de relatorio.
+        Objetivo: para melhor manutenabilidade para a criação dos relatorios
+     */
+
+    private static final String pasta = "C:\\Users\\Pardal\\Faculdade\\TRABALHO_POOII\\Relatorios";
+
+    public String getPasta() {
+        return pasta;
+    }
+
 
     // Método para exportar as tarefas para um arquivo TXT
     public boolean exportar(ArrayList<Tarefa> tarefas, Usuario usuarioAtual) {
-        // Definir a pasta onde o arquivo será salvo
-        String pastaRelatorios = "C:\\Users\\Pardal\\Faculdade\\TRABALHO_POOII\\Relatorios";// Pasta relativa ao diretório onde o programa está sendo executado
-        File pasta = new File(pastaRelatorios);
-
-        // Verificar se a pasta existe, se não, criar a pasta
-        if (!pasta.exists()) {
-            pasta.mkdir(); // Cria a pasta se ela não existir
-        }
+        // Definir a pasta onde o arquivo será salvo// Pasta relativa ao diretório onde o programa está sendo executado
+        File pasta = new File(getPasta());
 
         // Gerar o nome do arquivo com o nome do usuário e a data/hora
-        String nomeArquivo = pastaRelatorios + "/Relatorio_tarefas_" + usuarioAtual.getNome() + "_" +
+        String nomeArquivo = pasta + "/Relatorio_tarefas_" + usuarioAtual.getNome() + "_" +
                 obterDataHoraAtual() + ".txt";
 
         // Tentar escrever no arquivo

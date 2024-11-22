@@ -2,26 +2,16 @@ package org.example.projcrudpoo.dao;
 
 import org.example.projcrudpoo.model.Usuario;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-public class UsuarioDBDAO implements UsuarioDAO, IConst {
+
+public class UsuarioDBDAO extends GenericaDAO implements UsuarioDAO, IConst {
     private String sql;
-    private Connection connection;
     private PreparedStatement statement;
     private ResultSet result;
-
-    private void open() throws SQLException {
-        connection = Conexao.getConexao(Conexao.stringDeConexao, Conexao.usuario, Conexao.senha);
-    }
-
-    private void close() throws SQLException {
-        connection.close();
-    }
 
     @Override
     public void cadastrar(Usuario usuario) throws SQLException {

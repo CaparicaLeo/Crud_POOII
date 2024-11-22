@@ -2,26 +2,16 @@ package org.example.projcrudpoo.dao;
 
 import org.example.projcrudpoo.model.Tarefa;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class TarefaDBDAO implements IConst, TarefaDAO{
+public class TarefaDBDAO extends GenericaDAO implements IConst, TarefaDAO{
     private String sql;
-    private Connection connection;
     private PreparedStatement statement;
     private ResultSet result;
 
-    private void open() throws SQLException {
-        connection = Conexao.getConexao(Conexao.stringDeConexao, Conexao.usuario, Conexao.senha);
-    }
-
-    private void close() throws SQLException {
-        connection.close();
-    }
     @Override
     public void insere(Tarefa tarefa) throws SQLException {
         open();
