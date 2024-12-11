@@ -1,0 +1,53 @@
+import org.example.projcrudpoo.model.Exportador;
+import org.junit.jupiter.api.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ExportadorTest {
+
+    private static final String TESTE_ARQUIVO = "C:\\Users\\Pardal\\Faculdade\\TRABALHO_POOII\\Relatorios\\teste.txt";
+
+    @BeforeEach
+    void setUp() throws IOException {
+        // Limpa o arquivo de teste antes de cada execução
+        Files.deleteIfExists(Paths.get(TESTE_ARQUIVO));
+    }
+
+    @Test
+    void testMostrarData() {
+        Exportador exportador = new Exportador();
+
+        // Obter a data formatada
+        String dataFormatada = exportador.mostrarData();
+
+        // Verificar se a data está no formato esperado
+        assertTrue(dataFormatada.matches("\\d{2}/\\d{2}/\\d{4}"), "A data não está no formato esperado dd/MM/yyyy.");
+    }
+
+    @Test
+    void testEscreverNoArquivo() throws IOException {
+        Exportador exportador = new Exportador();
+
+        // Mensagem de teste
+        String mensagem = "Teste de escrita no arquivo.";
+
+        // Chamar o método para escrever no arquivo
+        exportador.escreverNoArquivo(mensagem, TESTE_ARQUIVO);
+
+        // Ler o conteúdo do arquivo para validar
+        String conteudo = Files.readString(Paths.get(TESTE_ARQUIVO));
+
+        // Verificar se o conteúdo do arquivo é igual à mensagem escrita
+        assertEquals(mensagem, conteudo.trim(), "O conteúdo do arquivo não corresponde ao esperado.");
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        // Limpa o arquivo de teste após a execução
+        Files.deleteIfExists(Paths.get(TESTE_ARQUIVO));
+    }
+}
