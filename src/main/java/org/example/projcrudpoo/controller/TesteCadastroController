@@ -1,0 +1,94 @@
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.example.projcrudpoo.controller.CadastroController;
+import org.example.projcrudpoo.dao.UsuarioDBDAO;
+import org.example.projcrudpoo.model.Usuario;
+import org.junit.jupiter.api.*;
+import org.testfx.framework.junit5.ApplicationTest;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CadastroControllerTest extends ApplicationTest {
+
+    private CadastroController cadastroController;
+    private UsuarioDBDAO usuarioDBDAO;
+
+    @BeforeEach
+    void setUp() {
+        cadastroController = new CadastroController();
+        usuarioDBDAO = new UsuarioDBDAO();
+    }
+
+    // Início do teste voltarLogin
+    @Test
+    void voltarLogin() throws Exception {
+        // Simula o carregamento da tela de login
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/projcrudpoo/view/LoginView.fxml"));
+        Parent login = loader.load();
+
+        // Configura um Stage simulado
+        Stage stage = new Stage();
+        stage.setScene(new Scene(login));
+        stage.setTitle("Login - Gerenciador de Tarefas");
+        stage.show();
+
+        // Verifica se o título da janela foi atualizado corretamente
+        assertEquals("Login - Gerenciador de Tarefas", stage.getTitle(), "O título da janela não corresponde ao esperado.");
+
+        // Verifica se a cena foi carregada corretamente
+        assertNotNull(stage.getScene().getRoot(), "A cena não foi carregada corretamente.");
+    }
+    // Fim do teste voltarLogin
+
+    // Início do teste cadastrarUsuario
+    @Test
+    void cadastrarUsuario() throws SQLException {
+        // Dados do usuário para teste
+        Usuario usuarioTeste = new Usuario("emailteste@example.com", "usuarioTeste", "senhaTeste");
+
+        // Executa o método de cadastro
+        usuarioDBDAO.cadastrar(usuarioTeste);
+
+        // Verifica se o usuário foi inserido no banco
+        String sql = "SELECT * FROM usuario WHERE email = ? AND nome = ?";
+        try (Connection connection = Conexao.getConexao(Conexao.stringDeConexao, Conexao.usuario, Conexao.senha);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, usuarioTeste.getEmail());
+            statement.setString(2, usuarioTeste.getNome());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Valida que o e-mail e o nome correspondem
+                assertEquals(usuarioTeste.getEmail(), resultSet.getString("email"), "O e-mail do usuário não corresponde.");
+                assertEquals(usuarioTeste.getNome(), resultSet.getString("nome"), "O nome do usuário não corresponde.");
+            } else {
+                fail("Usuário não encontrado no banco de dados após o cadastro.");
+            }
+        } finally {
+            // Remove o usuário para limpar o banco após o teste
+            String sqlDelete = "DELETE FROM usuario WHERE email = ?";
+            try (Connection connection = Conexao.getConexao(Conexao.stringDeConexao, Conexao.usuario, Conexao.senha);
+                 PreparedStatement statement = connection.prepareStatement(sqlDelete)) {
+                statement.setString(1, usuarioTeste.getEmail());
+                statement.executeUpdate();
+            }
+        }
+    }
+    // Fim do teste cadastrarUsuario
+
+    @AfterEach
+    void tearDown() {
+        // Opcional: Limpeza adicional, se necessário
+    }
+}
+
+
+
